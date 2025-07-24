@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/your-user-name/myapp.git'
+                git 'https://github.com/Pradyummyadav0992/POC-9.git'
+
             }
         }
 
