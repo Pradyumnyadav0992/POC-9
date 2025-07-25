@@ -21,4 +21,4 @@
       shell: docker pull "{{IMAGE_VERSION}}"
 
     - name: Run container
-      shell: docker run -d -p 80:3000 --name poc-9 "{{IMAGE_VERSION}}"
+      shell: docker run -d -p 8070:3000 --name poc-9 "{{IMAGE_VERSION}}"
