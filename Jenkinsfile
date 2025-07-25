@@ -16,7 +16,7 @@ pipeline {
 					}
 		}
 		
-		stage(Build)){
+		stage('Build')){
 			steps{
 				env.IMAGE_VERSION=$ECR_REGISTRY:$BUILD_NUMBER
 				sh """
@@ -42,7 +42,7 @@ pipeline {
         }
 
 
-		stage(Deploy){
+		stage('Deploy'){
 			step{
 				ansiblePlaybook(
 					playbook: 'deploy.yml'
