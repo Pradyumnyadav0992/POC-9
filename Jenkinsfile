@@ -45,8 +45,8 @@ pipeline {
 		stage('Deploy'){
 			step{
 				ansiblePlaybook(
-					playbook: 'deploy.yml'
-					inventory: 'localhost'
+					playbook: 'deploy.yml',
+					inventory: 'localhost,',
 					extraVars: [ IMAGE_VERSION = "{$env.IMAGE_VERSION"}]
 				)
 
