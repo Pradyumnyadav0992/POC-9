@@ -47,7 +47,7 @@ pipeline {
 				ansiblePlaybook(
 					playbook: 'deploy.yml',
 					inventory: 'localhost,',
-					extraVars: [ IMAGE_VERSION = "{$env.IMAGE_VERSION"}]
+					extraVars: [ IMAGE_VERSION : "{$env.IMAGE_VERSION"} ]
 				)
 
 		}
