@@ -1,4 +1,5 @@
 pipeline {
+	
 	agent {
 		node{
 			label 'Slave_node1'
@@ -6,10 +7,12 @@ pipeline {
 		}
 
 	}
+
 	environment{
 		ECR_REGISTRY="963665911471.dkr.ecr.us-east-1.amazonaws.com"
 		IMAGE_VERSION="${ECR_REGISTRY}:{$BUILD_NUMBER}"
 	}
+
 	stages{
 		stage("FIRST"){
 				steps{
@@ -41,17 +44,18 @@ pipeline {
             }
         }
 
-
-		stage('Deploy'){
-			step{
+		stage('Deploy') {
+			steps {
 				ansiblePlaybook(
 					playbook: 'deploy.yml',
 					inventory: 'localhost,',
-					extraVars: [ IMAGE_VERSION : "${env.IMAGE_VERSION}" ]
+					extraVars: [
+						IMAGE_VERSION: "${env.IMAGE_VERSION}"
+					]
 				)
-
-				}
+			}
 		}
+
 
 		stage('Cleanup Workspace') {
             steps {
@@ -61,9 +65,6 @@ pipeline {
 
 	}
 		
-		
-		
-		
-	}
+}
 
 
