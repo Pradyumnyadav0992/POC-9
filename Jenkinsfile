@@ -51,6 +51,7 @@ pipeline {
 					inventory: 'localhost,',
 					extraVars: [
 						IMAGE_VERSION: "${env.IMAGE_VERSION}"
+						ECR_REGISTRY: "${env.ECR_REGISTRY}"
 					]
 				)
 			}

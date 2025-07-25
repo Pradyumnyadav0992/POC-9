@@ -3,9 +3,16 @@
   become: yes
   connection: local
 
+  vars:
+
   tasks:
     - name: Stop existing container
       shell: docker rm -f poc-9 || true
+    
+    - name: Login to AWS ECR
+      shell: |
+        aws ecr get-login-password --region {{ECR_REGISTRY}}| \
+        docker login --username AWS --password-stdin {{ECR_REGISTRY}}
 
     - name: Pull latest image
       shell: docker pull "{{IMAGE_VERSION}}"
