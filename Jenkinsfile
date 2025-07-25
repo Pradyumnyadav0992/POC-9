@@ -44,18 +44,36 @@ pipeline {
             }
         }
 
-		stage('Deploy') {
-			steps {
-				ansiblePlaybook(
-					playbook: 'deploy.yml',
-					inventory: 'localhost,',
-					extraVars: [
-						IMAGE_VERSION: "${env.IMAGE_VERSION}",
-						ECR_REGISTRY: "${env.ECR_REGISTRY}"
-					]
-				)
-			}
-		}
+		stage('Docker push') {
+            steps {
+                withCredentials([string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY'), 
+                                 string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_KEY')]) {
+						ansiblePlaybook(
+							playbook: 'deploy.yml',
+							inventory: 'localhost,',
+							extraVars: [
+								IMAGE_VERSION: "${env.IMAGE_VERSION}",
+								ECR_REGISTRY: "${env.ECR_REGISTRY}"
+							]
+						)
+                }
+            }
+        }
+
+
+
+		// stage('Deploy') {
+		// 	steps {
+		// 		ansiblePlaybook(
+		// 			playbook: 'deploy.yml',
+		// 			inventory: 'localhost,',
+		// 			extraVars: [
+		// 				IMAGE_VERSION: "${env.IMAGE_VERSION}",
+		// 				ECR_REGISTRY: "${env.ECR_REGISTRY}"
+		// 			]
+		// 		)
+		// 	}
+		// }
 
 
 		stage('Cleanup Workspace') {
