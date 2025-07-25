@@ -44,7 +44,7 @@ pipeline {
             }
         }
 
-		stage('Docker push') {
+		stage('Deploy') {
             steps {
                 withCredentials([string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY'), 
                                  string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_KEY')]) {
