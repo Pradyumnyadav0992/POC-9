@@ -8,6 +8,7 @@ pipeline {
 	}
 	environment{
 		ECR_REGISTRY="963665911471.dkr.ecr.us-east-1.amazonaws.com"
+		IMAGE_VERSION="${ECR_REGISTRY}:{$BUILD_NUMBER}"
 	}
 	stages{
 		stage("FIRST"){
@@ -18,9 +19,8 @@ pipeline {
 		
 		stage('Build'){
 			steps{
-				env.IMAGE_VERSION=$ECR_REGISTRY:$BUILD_NUMBER
 				sh """
-				docker build -t ${IMAGE_VERSION} .
+				docker build -t ${env.IMAGE_VERSION} .
 				"""
 			}
 		
@@ -35,7 +35,7 @@ pipeline {
 					
 					IMAGE_VERSION="${env.IMAGE_VERSION}"
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${env.ECR_REGISTRY}
-					docker push ${env.ECR_REGISTRY}:\$IMAGE_VERSION
+					docker push ${env.IMAGE_VERSION}
                     """
                 }
             }
