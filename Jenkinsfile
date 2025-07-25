@@ -53,9 +53,10 @@ pipeline {
 							inventory: 'localhost,',
 							extraVars: [
 								IMAGE_VERSION: "${env.IMAGE_VERSION}",
-								ECR_REGISTRY: "${env.ECR_REGISTRY}"
-							],
-                extras: "-e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY"
+								ECR_REGISTRY: "${env.ECR_REGISTRY}",
+								AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY}",
+								AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_KEY}"
+							]
 						)
                 }
             }

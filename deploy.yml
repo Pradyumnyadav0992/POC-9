@@ -10,9 +10,12 @@
       shell: docker rm -f poc-9 || true
     
     - name: Login to AWS ECR
-      shell: |
-        aws ecr get-login-password --region us-east-1 | \
-        docker login --username AWS --password-stdin {{ECR_REGISTRY}}
+      shell: >
+        aws ecr get-login-password --region {{ AWS_REGION }}
+        | docker login --username AWS --password-stdin {{ ECR_REGISTRY }}
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
 
     - name: Pull latest image
       shell: docker pull "{{IMAGE_VERSION}}"
