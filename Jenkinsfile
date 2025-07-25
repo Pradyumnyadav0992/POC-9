@@ -1,14 +1,69 @@
 pipeline {
-	agent any
+	agent {
+		node{
+			label 'Slave_node1'
+			customWorkspace '/home/ubuntu/jenkins_workspace/' 
+		}
+
+	}
+	environment{
+		ECR_REGISTRY="963665911471.dkr.ecr.us-east-1.amazonaws.com"
+	}
 	stages{
 		stage("FIRST"){
 				steps{
-					echo "hello world"
-				}
+					echo "Git clone Successfull"
+					}
+		}
+		
+		stage(Build)){
+			steps{
+				env.IMAGE_VERSION=$ECR_REGISTRY:$BUILD_NUMBER
+				sh """
+				docker build -t ${IMAGE_VERSION} .
+				"""
+			}
+		
 		}
 		
 		
+		stage('Docker push') {
+            steps {
+                withCredentials([string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY'), 
+                                 string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_KEY')]) {
+                    sh """
+					
+					IMAGE_VERSION="${env.IMAGE_VERSION}"
+                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${env.ECR_REGISTRY}
+					docker push ${env.ECR_REGISTRY}:\$IMAGE_VERSION
+                    """
+                }
+            }
+        }
+
+
+		stage(Deploy){
+			step{
+				ansiblePlaybook(
+					playbook: 'deploy.yml'
+					inventory: 'localhost'
+					extraVars: [ IMAGE_VERSION = "{$env.IMAGE_VERSION"}]
+				)
+
 		}
+
+		stage('Cleanup Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+	}
+		
+		
+		
+		
+	}
 
 
 }

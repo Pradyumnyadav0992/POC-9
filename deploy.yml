@@ -1,0 +1,14 @@
+- name: Deploy app using Docker
+  hosts: localhost
+  become: yes
+  connection: local
+
+  tasks:
+    - name: Stop existing container
+      shell: docker rm -f poc-9 || true
+
+    - name: Pull latest image
+      shell: docker pull "{{IMAGE_VERSION}}"
+
+    - name: Run container
+      shell: docker run -d -p 80:3000 --name poc-9 "{{IMAGE_VERSION}}"
