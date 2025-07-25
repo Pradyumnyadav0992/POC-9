@@ -1,5 +1,5 @@
 pipeline {
-	
+
 	agent {
 		node{
 			label 'Slave_node1'
@@ -10,7 +10,7 @@ pipeline {
 
 	environment{
 		ECR_REGISTRY="963665911471.dkr.ecr.us-east-1.amazonaws.com"
-		IMAGE_VERSION="${ECR_REGISTRY}:{$BUILD_NUMBER}"
+		IMAGE_VERSION="${ECR_REGISTRY}:${BUILD_NUMBER}"
 	}
 
 	stages{
